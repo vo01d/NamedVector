@@ -35,17 +35,17 @@
  *    3) reserve(), clear()
  */
 
- // наслідування від класу std::vector, який для цього не призначений. В цьому випадку краще використати композицію
+ // inheriting from the std::vector class, which is not intended for this. In this case, it is better to use a composition
 template <typename T>
 class MyVector : public std::vector<T> { 
 public:
-    // Не здійснено обробку винятку std::bad_alloc при виділенні пам'яті для m_ref_ptr і m_names
+    // Unhandled std::bad_alloc exception when allocating memory for m_ref_ptr and m_names
     MyVector() {
         m_ref_ptr = new size_t(1);
         m_names = new std::vector<std::string>();
     }
 
-    // порядок ініціалізації змінних не відповідає порядку їх визначення
+    // the order of initialization of variables does not correspond to the order of their definition
     MyVector(const MyVector& other) : std::vector<T>(other), m_ref_ptr(other.m_ref_ptr), m_names(other.m_names) {
         (*m_ref_ptr)++;
     }
@@ -64,10 +64,10 @@ public:
         m_names->push_back(name);
     }
 
-    // для кращої читабельності варто використати ключове слово const: const int index 
+    // for better readability, you should use the const keyword: const int index
     std::pair<const T&, const std::string&> operator[](int index) const {
         if (index >= std::vector<T>::size()) {
-            // можливий витік пам'яті через відсутність механізму для звільнення виділеної пам'яті для std::out_of_range
+            // possible memory leak due to lack of mechanism to free allocated memory for std::out_of_range
             throw new std::out_of_range("Index is out of range");
         }
 
@@ -75,11 +75,11 @@ public:
     }
 
     const T& operator[](const std::string& name) const {
-        // для кращої читабельності варто використати ключове слово auto та const 
+        // for better readability, you should use the keyword auto and const
         // const auto iter...
         std::vector<std::string>::const_iterator iter = std::find(m_names->begin(), m_names->end(), name);
         if (iter == m_names->end()) {
-            // можливий витік пам'яті через відсутність механізму для звільнення виділеної пам'яті для std::invalid_argument
+            // possible memory leak due to lack of mechanism to free allocated memory for std::invalid_argument
             throw new std::invalid_argument(name + " is not found in the MyVector");
         }
 
@@ -92,7 +92,7 @@ private:
             return;
         }
 
-        // Не здійснено обробку винятку std::bad_alloc при виділенні пам'яті для temp_ref_ptr і temp_names
+        // Unhandled std::bad_alloc exception when allocating memory for temp_ref_ptr and temp_names
         size_t* temp_ref_ptr = new size_t(1);
         std::vector<std::string>* temp_names = new std::vector<std::string>(*m_names);
 
@@ -102,7 +102,7 @@ private:
     }
 
 private:
-    // в даному випадку краще використати розумні вказівники замість звичайних 
+    // in this case, it is better to use smart pointers instead of ordinary ones
     std::vector<std::string>* m_names;
     size_t* m_ref_ptr;
 };
