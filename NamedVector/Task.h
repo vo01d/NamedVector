@@ -64,6 +64,7 @@ public:
         m_names->push_back(name);
     }
 
+    // для кращої читабельності варто використати ключове слово const: const int index 
     std::pair<const T&, const std::string&> operator[](int index) const {
         if (index >= std::vector<T>::size()) {
             // можливий витік пам'яті через відсутність механізму для звільнення виділеної пам'яті для std::out_of_range
@@ -91,6 +92,7 @@ private:
             return;
         }
 
+        // Не здійснено обробку винятку std::bad_alloc при виділенні пам'яті для temp_ref_ptr і temp_names
         size_t* temp_ref_ptr = new size_t(1);
         std::vector<std::string>* temp_names = new std::vector<std::string>(*m_names);
 

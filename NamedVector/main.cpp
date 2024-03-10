@@ -30,6 +30,11 @@ int main() {
         namedVector2.push_back(4, "four");
         namedVector2.push_back(5, "four");
 
+        for (const auto& [value, name] : namedVector2) {
+            std::cout << "namedVector2::value =  " << value << ", namedVector1::name = " << name << std::endl;
+        }
+        std::cout << std::endl;
+
         std::cout << "namedVector2::name \"four\" value = " << namedVector2["four"] << std::endl << std::endl;
 
         namedVector2.clear();
@@ -46,7 +51,6 @@ int main() {
     }
     catch (...) {
         std::cout << "Something went wrong!" << std::endl;
-
     }
 
     return 0;
